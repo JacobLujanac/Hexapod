@@ -1,0 +1,6 @@
+
+# function to determine movement goal
+  # factor in
+    # target state (comes from path planning algorithim)
+    # current state
+
