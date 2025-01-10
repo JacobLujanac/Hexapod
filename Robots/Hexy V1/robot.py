@@ -92,16 +92,16 @@ class robot(PoMoCoModule.Node):
         self.outgoingNoteQueue = Queue.Queue()
         PoMoCoModule.Node.modules[self.moduleType] = self.inNoteQueue
         self.servos = []
-        for i in range(32):
+         for i in range(18):
             self.servos.append(Servo(self, i))
 
-        self.RF = leg(self, 'rightFront', self.servos[24], self.servos[25], self.servos[26])
-        self.RM = leg(self, 'rightMid', self.servos[20], self.servos[21], self.servos[22])
-        self.RB = leg(self, 'rightBack', self.servos[16], self.servos[17], self.servos[18])
+        self.RF = leg(self, 'rightFront', self.servos[3], self.servos[2], self.servos[1])
+        self.RM = leg(self, 'rightMid', self.servos[9], self.servos[8], self.servos[7])
+        self.RB = leg(self, 'rightBack', self.servos[15], self.servos[14], self.servos[13])
 
-        self.LF = leg(self, 'leftFront', self.servos[7], self.servos[6], self.servos[5])
-        self.LM = leg(self, 'leftMid', self.servos[11], self.servos[10], self.servos[9])
-        self.LB = leg(self, 'leftBack', self.servos[15], self.servos[14], self.servos[13])
+        self.LF = leg(self, 'leftFront', self.servos[6], self.servos[5], self.servos[4])
+        self.LM = leg(self, 'leftMid', self.servos[12], self.servos[11], self.servos[10])
+        self.LB = leg(self, 'leftBack', self.servos[18], self.servos[17], self.servos[16])
 
         self.legs = [self.RF,
                      self.RM,
@@ -110,7 +110,6 @@ class robot(PoMoCoModule.Node):
                      self.LM,
                      self.LB]
 
-        self.neck = neck(self, self.servos[31])
 
         self.tripod1 = [self.RF, self.RB, self.LM]
         self.tripod2 = [self.LF, self.LB, self.RM]
