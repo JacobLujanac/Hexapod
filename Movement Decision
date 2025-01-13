@@ -4,3 +4,10 @@
     # target state (comes from path planning algorithim)
     # current state
 
+
+## assign which legs will make up each tripod
+
+## The type of movement will be determined
+## The angles for each joint will be determined based off of the type of move
+## Will have to change the sign of the angle depending on if its on the left or right sides
+## This will update the servo.SetDegree (which is the next degree that the legs are moving to)
