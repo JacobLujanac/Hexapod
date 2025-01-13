@@ -54,8 +54,8 @@ class Servo():
                 self.deg = -90
             else:
                 self.deg = deg
-            self.parent.writeAndSendNote("SetServoPos", "%d,%.1f" % (self.num, self.deg), "GUI")
-            self.parent.writeAndSendNote("SetServoPos", "%d,%.1f" % (self.num, self.deg), "controller")
+           ## PROBS CAN DELETE self.parent.writeAndSendNote("SetServoPos", "%d,%.1f" % (self.num, self.deg), "GUI")
+           ##  self.parent.writeAndSendNote("SetServoPos", "%d,%.1f" % (self.num, self.deg), "controller")
 
 
     def GetDeg(self):
@@ -64,8 +64,8 @@ class Servo():
     def SetOffset(self, offset):
         self.offset = offset
         #print self.num,offset
-        self.parent.writeAndSendNote("SetServoOffset", "%d,%.1f" % (self.num, self.offset), "GUI")
-        self.parent.writeAndSendNote("SetServoOffset", "%d,%.1f" % (self.num, self.offset), "controller")
+        ## PROBS CAN DELETE  self.parent.writeAndSendNote("SetServoOffset", "%d,%.1f" % (self.num, self.offset), "GUI")
+        ## self.parent.writeAndSendNote("SetServoOffset", "%d,%.1f" % (self.num, self.offset), "controller")
 
 
     def GetOffset(self):
@@ -74,16 +74,19 @@ class Servo():
     def GetNum(self):
         return self.num
 
-    def SetActive(self, active=True):
-        if active:
-            outState = "active"
-        else:
-            outState = "inactive"
-        self.parent.writeAndSendNote("SetServoActive", str(self.num) + "," + outState, "GUI")
-        self.parent.writeAndSendNote("SetServoActive", str(self.num) + "," + outState, "controller")
+    ## PROBS CAN DELETE 
+
+        #def SetActive(self, active=True):
+       # if active:
+       #     outState = "active"
+       # else:
+      #      outState = "inactive"
+       # self.parent.writeAndSendNote("SetServoActive", str(self.num) + "," + outState, "GUI")
+       # self.parent.writeAndSendNote("SetServoActive", str(self.num) + "," + outState, "controller")
 
 
-class robot(PoMoCoModule.Node):
+# OG: class robot(PoMoCoModule.Node):
+class robot(self):
     def __init__(self):
         super(robot, self).__init__()
         threading.Thread.__init__(self)
@@ -111,18 +114,19 @@ class robot(PoMoCoModule.Node):
                      self.LB]
 
 
-        self.tripod1 = [self.RF, self.RB, self.LM]
-        self.tripod2 = [self.LF, self.LB, self.RM]
+        #self.tripod1 = [self.RF, self.RB, self.LM]
+       #self.tripod2 = [self.LF, self.LB, self.RM]
 
         self.start()
 
-    def writeAndSendNote(self, type, message, receiver):
-        toSend = PoMoCoModule.Note()
-        toSend.sender = "robot"
-        toSend.type = type
-        toSend.message = message
-        toSend.receiver = receiver
-        PoMoCoModule.Node.modules[toSend.receiver].put(toSend)
+## Probs can delete   
+#def writeAndSendNote(self, type, message, receiver):
+      #  toSend = PoMoCoModule.Note()
+      #  toSend.sender = "robot"
+      #  toSend.type = type
+     #   toSend.message = message
+     #   toSend.receiver = receiver
+    #    PoMoCoModule.Node.modules[toSend.receiver].put(toSend)
 
 
     def run(self):
@@ -135,64 +139,64 @@ class robot(PoMoCoModule.Node):
 
             time.sleep(0)  # keeps infinite loop from hogging all the CPU
 
-    def processNote(self, note):
-        #print "Note:",note.sender,"->",note.receiver,"-",note.type,":",note.message
-        if note.type == "RequestDisableAll":
-            for servo in self.servos:
-                servo.active = False
-            self.writeAndSendNote("RequestDisableAll", "", "controller")
+#    def processNote(self, note):
+  #      #print "Note:",note.sender,"->",note.receiver,"-",note.type,":",note.message
+  #      if note.type == "RequestDisableAll":
+   #         for servo in self.servos:
+    #            servo.active = False
+    #        self.writeAndSendNote("RequestDisableAll", "", "controller")
 
-        if note.type == "RequestEnableAll":
-            for servo in self.servos:
-                servo.active = True
-            self.writeAndSendNote("RequestEnableAll", "", "controller")
+   #     if note.type == "RequestEnableAll":
+    #        for servo in self.servos:
+    #            servo.active = True
+  #          self.writeAndSendNote("RequestEnableAll", "", "controller")
 
-        if note.type == "RequestCenterAll":
-            for servo in self.servos:
-                servo.deg = 0
-            self.writeAndSendNote("RequestCenterAll", "", "controller")
+#        if note.type == "RequestCenterAll":
+  #          for servo in self.servos:
+  #              servo.deg = 0
+  #          self.writeAndSendNote("RequestCenterAll", "", "controller")
 
-        if note.type == "SetServoPos":
-            num, pos = note.message.split(',')
-            num = int(num);
-            pos = float(pos)
-            self.servos[num].SetDeg(pos)
+   #     if note.type == "SetServoPos":
+   #         num, pos = note.message.split(',')
+   #         num = int(num);
+   #         pos = float(pos)
+  #          self.servos[num].SetDeg(pos)
 
-        if note.type == "SetServoOffset":
-            num, offset = note.message.split(',')
-            num = int(num);
-            offset = float(offset)
-            self.servos[num].SetOffset(offset)
+ #       if note.type == "SetServoOffset":
+  #          num, offset = note.message.split(',')
+  #          num = int(num);
+  #          offset = float(offset)
+  #          self.servos[num].SetOffset(offset)
 
-        if note.type == "SetServoActive":
-            num, inState = note.message.split(',')
-            num = int(num);
-            outState = False
-            if inState == "active":
-                outState = True
-            if inState == "inactive":
-                outState = False
-            self.servos[num].SetActive(outState)
+   #     if note.type == "SetServoActive":
+   #         num, inState = note.message.split(',')
+   #         num = int(num);
+   #         outState = False
+  #          if inState == "active":
+   #             outState = True
+   #         if inState == "inactive":
+     #           outState = False
+     #       self.servos[num].SetActive(outState)
 
-        if note.type == "RunMove":
-            moveName = note.message[:]  # copy the move name locally
-            print "running", moveName
-            self.RunMove(moveName)
+     #   if note.type == "RunMove":
+      #      moveName = note.message[:]  # copy the move name locally
+       #     print "running", moveName
+        #    self.RunMove(moveName)
 
-    def RunMove(self, moveName):
-        moveName = moveName.replace(' ', '')
-        if moveName in sys.modules:
-            reload(sys.modules[moveName])
-        else:
-            __import__(moveName)
+ #   def RunMove(self, moveName):
+ v       moveName = moveName.replace(' ', '')
+  #      if moveName in sys.modules:
+  #          reload(sys.modules[moveName])
+  #      else:
+   #         __import__(moveName)
 
 
-class neck():
-    def __init__(self, parent, servo):
-        self.servo = servo
-        self.parent = parent
+#class neck():
+  #  def __init__(self, parent, servo):
+   #     self.servo = servo
+   #     self.parent = parent
 
-    def set(self, deg):
+  def set(self, deg):
         self.servo.SetDeg(deg)
 
 
@@ -204,6 +208,11 @@ class leg():
         self.kneeServo = kneeServo
         self.ankleServo = ankleServo
 
+        self.coxaLen = 55.66; #mm
+        self.femurLen = 86.79; #mm
+        self.tibiaLen = 70.42; #mm
+        
+# Set Joint Angles
     def hip(self, deg):
         self.hipServo.SetActive()
         self.hipServo.SetDeg(deg)
@@ -216,16 +225,13 @@ class leg():
         self.ankleServo.SetActive()
         self.ankleServo.SetDeg(deg)
 
-    def setHipDeg(self, endHipAngle, stepTime=1):
-        runMovement(self.setHipDeg_function, endHipAngle, stepTime)
+ 
 
-    def setFootY(self, footY, stepTime=1):
-        runMovement(self.setFootY_function, footY, stepTime)
 
-    def replantFoot(self, endHipAngle, stepTime=1):
-        runMovement(self.replantFoot_function, endHipAngle, stepTime)
 
-    def setHipDeg_function(self, endHipAngle, stepTime):
+
+    
+    def setHipDeg(self, endHipAngle, stepTime):
         startHipAngle = self.hipServo.GetDeg()
         hipDiff = endHipAngle - startHipAngle
         self.hip(endHipAngle)
@@ -239,7 +245,7 @@ class leg():
             #wait for next cycle
             time.sleep(float(stepTime) / float(stepPerS))
 
-    def setFootY_function(self, footY, stepTime):
+    def setFootY(self, footY, stepTime):
         # TODO: max steptime dependent
         # TODO: implement time-movements the servo commands sent for far fewer
         #       total servo commands
@@ -251,7 +257,7 @@ class leg():
             self.knee(kneeAngle)
             self.ankle(-ankleAngle)
 
-    def replantFoot_function(self, endHipAngle, stepTime):
+    def replantFoot(self, endHipAngle, stepTime):
         # Smoothly moves a foot from one position on the ground to another in time seconds
         # TODO: implement time-movements the servo commands sent for far fewer total servo
         #       commands
